@@ -1,17 +1,21 @@
 package com.example.jetpacknavigationexample
 
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.core.text.TextUtilsCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 
 class ChooseRecipientFragment : Fragment(), View.OnClickListener {
 
-    var navController: NavController? = null;
+    lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +35,16 @@ class ChooseRecipientFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v!!.id) {
             R.id.next_btn -> {
-                navController!!.navigate(R.id.action_chooseRecipientFragment_to_specifyAmountFragment)
+                if(!TextUtils.isEmpty(R.id.input_recipient.toString())) {
+                    val bundle = bundleOf("recipient" to R.id.input_recipient.toString())
+                    navController!!.navigate(
+                        R.id.action_chooseRecipientFragment_to_specifyAmountFragment,
+                        bundle
+                    )
+                }
+                else {
+                    Toast.makeText(activity, "Enter a recipient", Toast.LENGTH_SHORT).show()
+                }
             }
             R.id.cancel_btn -> requireActivity().onBackPressed()
         }
